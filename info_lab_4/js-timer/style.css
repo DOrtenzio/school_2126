@@ -1,0 +1,80 @@
+/* Stile globale per il corpo */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f9;
+    display: flex;
+    flex-direction: column; /* Modifica il layout in colonna */
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+/* Contenitore principale */
+#div_cont {
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+/* Contatore */
+#cont {
+    font-size: 48px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Contenitore per i pulsanti */
+#div_button {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+/* Pulsante */
+button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+/* Hover per i pulsanti */
+button:hover {
+    background-color: #45a049;
+}
+
+/* Pulsante di azzeramento */
+#div_button button:last-child {
+    background-color: #2196F3;  /* Imposta il colore blu */
+}
+
+#div_button button:last-child:hover {
+    background-color: #1976D2;  /* Colore blu scuro quando si passa sopra con il mouse */
+}
+
+/* Contenitore per l'immagine */
+#div_img {
+    margin-top: 20px;
+    text-align: center;
+}
+
+/* Immagine che appare al raggiungimento del conteggio */
+#div_img img {
+    max-width: 100%;
+    border-radius: 8px;
+    max-height: 300px;
+    transition: opacity 0.5s ease;
+}
+
+/* Transizione per visibilità */
+#div_img[style="visibility: hidden;"] img {
+    opacity: 0;
+}
