@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="it">
+    <head>
+        <title>Api Utente</title>
+        <!-- Required meta tags -->
+        <meta charset="utf-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, shrink-to-fit=no"
+        />
+
+        <!-- Bootstrap CSS v5.2.1 -->
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+            crossorigin="anonymous"
+        />
+        <link rel="stylesheet" href="style.css">
+
+        <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    </head>
+
+    <body>
+        <main>
+            <div class="bg-primary text-white py-4 shadow-sm mb-4">
+                <h1 class="text-center">Richiesta HTTP con Fetch API JavaScript</h1>
+            </div>
+            <div class="container my-4" >
+                <div id="div-header-botton" class="text-center mb-4">
+                    <h1 class="text-center my-3">Elenco Utenti</h1>
+                    <div id="barra-pulsanti" class="d-flex justify-content-center gap-3 flex-wrap my-3">
+                        <button class="btn btn-success mx-3" onclick="vista_aggiunta()">Aggiungi Utente</button>
+                        <script>
+                            function vista_aggiunta(){
+                                const form = document.getElementById("vista_aggiunta");
+                                form.style.display = form.style.display === "none" ? "flex" : "none";
+                            }
+                        </script>
+                    </div>
+                </div>
+                <form id="vista_aggiunta" class="card p-4 shadow-sm bg-light my-3 rounded-3" name="input" style="display: none;">
+                    <div class="input_spazio_aggiunta d-flex flex-column">
+                        <div class="mb-3">
+                            <label class="form-label">Nome Utente:</label>
+                            <input type="text" class="form-control" placeholder="Inserisci il nome dell'utente" name="name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Età Utente:</label>
+                            <input class="form-control" type="text" placeholder="Inserisci l'età dell'utente" name="eta" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Ruolo Utente:</label>
+                            <input class="form-control" type="text" placeholder="Inserisci il ruolo dell'utente" name="ruolo">
+                        </div>
+                    </div>       
+                    <div class="d-flex justify-content-center flex-wrap gap-3">
+                        <button class="btn btn-primary m-5" type="button" onclick="aggiungiCampo()">Aggiungi Altri Campi</button>
+                        <script>
+                            function aggiungiCampo() {
+                                const div_input = document.getElementById('vista_aggiunta').querySelector('.input_spazio_aggiunta');
+                                const div_interno = document.createElement('div');
+                                div_interno.className = 'card card-body bg-light mb-3 p-3 d-flex flex-column gap-2';
+
+                                const divNome = document.createElement('div');
+                                divNome.className = 'mb-2';
+                                const labelNome = document.createElement('label');
+                                labelNome.className = 'form-label small text-muted';
+                                labelNome.textContent = 'Nome campo:';
+                                const nomeinput = document.createElement('input');
+                                nomeinput.type = 'text';
+                                nomeinput.placeholder = 'Inserisci il nome del campo aggiuntivo';
+                                nomeinput.className = 'form-control valore-aggiuntivo';
+                                nomeinput.required = true;
+                                divNome.appendChild(labelNome);
+                                divNome.appendChild(nomeinput);
+
+                                const divValore = document.createElement('div');
+                                divValore.className = 'mb-2';
+                                const labelValore = document.createElement('label');
+                                labelValore.className = 'form-label small text-muted';
+                                labelValore.textContent = 'Valore campo:';
+                                const input = document.createElement('input');
+                                input.type = 'text';
+                                input.placeholder = 'Inserisci il valore del campo aggiuntivo';
+                                input.className = 'form-control valore-aggiuntivo';
+                                input.required = true;
+                                divValore.appendChild(labelValore);
+                                divValore.appendChild(input);
+
+                                const buttonRimuovi = document.createElement('button');
+                                buttonRimuovi.type = 'button';
+                                buttonRimuovi.className = 'btn btn-sm btn-outline-danger align-self-start';
+                                buttonRimuovi.textContent = 'Rimuovi campo';
+                                buttonRimuovi.onclick = () => div_interno.remove();
+
+                                div_interno.appendChild(divNome);
+                                div_interno.appendChild(divValore);
+                                div_interno.appendChild(buttonRimuovi);
+                                div_input.appendChild(div_interno);
+                            }
+                        </script>
+
+                        <button class="btn btn-primary m-5" type="button" onclick="aggiungi()">Inserisci</button>
+                        <script>
+                            function aggiungi(){
+                                let nome=input.name.value;
+                                let eta=input.eta.value;
+                                let ruolo=input.ruolo.value;
+                                let body={
+                                    'name': nome,
+                                    'age': eta,
+                                    'role':ruolo
+                                };
+                                if(nome && eta){
+                                    if(document.getElementsByClassName('valore-aggiuntivo').length>0){
+                                        for(let i=0;i<document.getElementsByClassName('valore-aggiuntivo').length;i+=2){
+                                            let chiave=document.getElementsByClassName('valore-aggiuntivo')[i].value;
+                                            let valore=document.getElementsByClassName('valore-aggiuntivo')[i+1].value;
+                                            body[chiave]=valore;
+                                        }
+                                    }
+                                    
+                                    fetch('https://friendly-space-giggle-x5r5977xv7q426wqr-3000.app.github.dev/api/users', {
+                                        method: 'POST',
+                                        headers: {
+                                            'accept': '*/*',
+                                            'Authorization': 'Bearer 5IDtoken',
+                                            'Content-Type': 'application/json'
+                                        },
+                                        body: JSON.stringify(body)
+                                    })
+                                    .then(response=>{
+                                        if(!response.ok) throw new Error("Errore nella risposta");
+                                        vista_aggiunta();
+                                        return response.json();
+                                    }).catch(error=>console.error('Errore:', error));
+                                }
+                            }
+                        </script>
+                    </div>
+                </form>
+                <div class="row" id="contenitore" >
+                   
+                </div>
+               
+
+            </div>
+
+            <template id="template">
+                <div class="card shadow-sm rounded-4 my-4 mx-3" style="width: 20rem;">
+                    <img src="https://picsum.photos/200/100?random=" class="card-img-top rounded-top my-4" alt="Immagine casuale" />
+                    <div class="card-body my-4">
+                        <h5 class="card-title"></h5>
+                        <h6 class="card-subtitle mb-2 text-body-secondary"></h6>
+                        <p class="card-text"></p>
+                        <p class="card-text-2"></p>
+                    </div>
+                    <div class="card-footer bg-light d-flex flex-column align-items-center gap-2 my-4">
+                    </div>
+                </div>
+            </template>
+
+            <template id="template-form">
+                <form class="card p-3 bg-light shadow-sm my-3 rounded-3" name="input-modifica">
+                    <div class="spazio_input d-flex flex-column">
+                        <label class="form-label small text-muted">Nome Utente:</label>
+                        <input class="form-control template-name" type="text" placeholder="Inserisci il nome dell'utente" name="name-modifica" required>
+                        <label class="form-label small text-muted">Età Utente:</label>
+                        <input class="form-control template-eta" type="text" placeholder="Inserisci l'età dell'utente" name="eta-modifica" required>
+                    </div>
+                    <div class="bottoni_spazio mt-3 inline-block d-flex justify-content-center">
+                        <button class="button-form btn btn-primary m-5" type="button">Modifica</button>
+                    </div>
+                </form>
+            </template>
+
+        </main>
+
+
+        <!-- Bootstrap JavaScript Libraries -->
+        <script
+            src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+            integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+            crossorigin="anonymous"
+        ></script>
+
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+            integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
+            crossorigin="anonymous"
+        ></script>
+
+        <script src="script.js"></script>
+    </body>
+</html>

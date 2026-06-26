@@ -1,0 +1,9 @@
+{
+  "name": "Super User",
+  "age": 0,
+  "role": "admin",
+  "data": {
+    "email": "super.user@domain.it",
+    "phone": "+391234567890"
+  }
+}
