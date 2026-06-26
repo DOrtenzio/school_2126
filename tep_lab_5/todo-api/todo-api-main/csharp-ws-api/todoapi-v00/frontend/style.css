@@ -1,0 +1,86 @@
+body { 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Animazione dissolvenza */
+.fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Stili Card Todo */
+.todo-card, .user-card {
+    transition: all 0.3s ease;
+    background: #fff;
+}
+
+.todo-card:hover, .user-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+}
+
+/* Stato visuale Todo */
+.nome.Completo { 
+    text-decoration: line-through; 
+    color: #adb5bd !important;
+}
+.nome.Incompleto { 
+    color: #212529; 
+}
+
+/* Badge ID */
+.id-badge {
+    font-size: 0.7rem;
+    font-weight: normal;
+}
+
+/* Evidenziazione aggiornamenti polling */
+.border-warning {
+    border: 5px solid #ffc107 !important;
+    transition: border 0.3s ease;
+}
+
+.border-primary {
+    border: 2px solid #0d6efd !important;
+}
+
+/* Stile personalizzato per la checkbox di cancellazione */
+.delete-check {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 1.25em;
+    height: 1.25em;
+    background-color: #fff;
+    margin: 0;
+    border: 2px solid #dc3545; /* Rosso */
+    border-radius: 0.25rem;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s ease;
+}
+
+.delete-check:checked {
+    background-color: #dc3545;
+    border-color: #a71d2a;
+}
+
+/* Simbolo X quando selezionato */
+.delete-check:checked::after {
+    content: "\f00d"; /* Icona X di FontAwesome */
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    color: white;
+    font-size: 0.8rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.delete-check:hover {
+    box-shadow: 0 0 5px rgba(220, 53, 69, 0.5);
+}

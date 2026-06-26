@@ -1,0 +1,49 @@
+body { 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Animazione dissolvenza */
+.fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Stili Card Todo */
+.todo-card, .user-card {
+    transition: all 0.3s ease;
+    background: #fff;
+}
+
+.todo-card:hover, .user-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+}
+
+/* Stato visuale Todo */
+.nome.Completo { 
+    text-decoration: line-through; 
+    color: #adb5bd !important;
+}
+.nome.Incompleto { 
+    color: #212529; 
+}
+
+/* Badge ID */
+.id-badge {
+    font-size: 0.7rem;
+    font-weight: normal;
+}
+
+/* Evidenziazione aggiornamenti polling */
+.border-warning {
+    border: 5px solid #ffc107 !important;
+    transition: border 0.3s ease;
+}
+
+.border-primary {
+    border: 2px solid #0d6efd !important;
+}

@@ -18,6 +18,8 @@ Raccolta dei laboratori teorici svolti durante il quinto anno di TeP.
 | 2 | Dotnet Codespaces | [dotnet-codespaces](./dotnet-codespaces) |
 | 3 | Tcp Richiesta HTTP1 | [tcp-richiestaHTTP1](./tcp-richiestaHTTP1) |
 | 4 | Tep_csharp1 | [tep_csharp1](./tep_csharp1) |
+| 5 | Api_Dotnet | [api-dotnet](./api-dotnet) |
+| 6 | Todo-Api | [todo-api](./todo-api) |
 
 ---
 

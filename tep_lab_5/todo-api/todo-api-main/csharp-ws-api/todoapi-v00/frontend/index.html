@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="it">
+<head>
+    <title>Gestione Todos & Utenti</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- https://italia.github.io/bootstrap-italia/docs/utilities/icone/  -  https://icons.getbootstrap.com/ -->
+
+</head>
+
+<body class="bg-light">
+    <nav id="navbar-principale" class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm mb-4" style="display: none;">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#" onclick="mostraVistaTodos()">App Gestionale</a>
+            
+            <div class="d-flex align-items-center gap-3">
+                <span class="navbar-text text-white fw-medium" id="info-utente"></span>
+                <span id="session-timer" class="badge bg-dark text-warning ms-2 shadow-sm" style="font-family: monospace;">10:00</span>
+                <button class="btn btn-warning btn-sm fw-bold text-dark" onclick="mostraVistaTodos()">
+                    <i class="fa-solid fa-clipboard-list me-2"></i> Todo
+                </button>
+                <button id="btn-admin-users" class="btn btn-warning btn-sm fw-bold text-dark" style="display: none;" onclick="mostraVistaUtenti()">
+                    <i class="fa-solid fa-users-gear me-1"></i> Utenti
+                </button>
+                <button class="btn btn-outline-light btn-sm" onclick="logout()">Esci</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        
+        <div id="vista-login" class="d-flex justify-content-center align-items-center min-vh-100">
+            <div class="card border-0 shadow-lg p-4 rounded-4" style="width: 100%; max-width: 400px;">
+                <div class="card-body">
+                    <h3 class="text-center mb-4 fw-bold text-primary">Benvenuto</h3>
+                    <form onsubmit="loginForm(event)">
+                        <div class="mb-3">
+                            <label class="form-label text-muted small">Nome Utente (es. diego)</label>
+                            <input type="text" class="form-control form-control-lg bg-light" id="login-nome" required placeholder="Inserisci nome">
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label text-muted small">Email</label>
+                            <input type="email" class="form-control form-control-lg bg-light" id="login-email" required placeholder="nome@mail.com">
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100 btn-lg rounded-pill shadow-sm">Accedi</button>
+                    </form>
+                    <div id="login-error" class="alert alert-danger mt-3 text-center small border-0" style="display: none;">
+                        <i class="fa-solid fa-triangle-exclamation me-1"></i> Credenziali non valide
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="vista-todos" style="display: none;" class="fade-in">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="fw-bold text-secondary">CRUD Todo</h2>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-outline-secondary" onclick="eseguiUndo()" title="CTRL+Z">
+                        <i class="fa-solid fa-rotate-left"></i> Undo
+                    </button>
+                    <button class="btn btn-outline-secondary" id="cancMult" onclick="cancellaMultiploTodo()" >
+                        <i class="fa-solid fa-trash"></i> Cancellazione Multipla
+                    </button>
+                    <button class="btn btn-primary shadow-sm" onclick="modificaVistaAggiuntaTodo()">
+                        <i class="fa-solid fa-plus me-1"></i> Nuovo
+                    </button>
+                </div>
+            </div>
+
+            <div id="form-todo-container" class="card border-0 shadow-sm p-4 mb-4 bg-white rounded-4" style="display: none;">
+                <h5 class="mb-3 text-primary">Aggiungi nuova attività</h5>
+                <form id="form-add-todo" onsubmit="aggiungiTodo(event)">
+                    <div class="row g-2 align-items-end">
+                        <div class="col-md-8">
+                            <label class="form-label small text-muted">Nome Attività</label>
+                            <input type="text" class="form-control" name="nome" required placeholder="Cosa devi fare?">
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" name="isComplete" id="checkNew">
+                                <label class="form-check-label small" for="checkNew">Fatto</label>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="col-md-4">
+                                <label class="form-label small text-muted">Categoria ID</label>
+                                <input type="number" class="form-control" name="categoryId" required value="1">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small text-muted">Lista ID</label>
+                                <input type="number" class="form-control" name="listId" required value="1">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <button type="submit" class="btn btn-success w-100">Salva</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <label class="input-group-text bg-white border-0 text-muted small" for="filtro-stato">Mostra:</label>
+                        <select class="form-select border-0 shadow-sm rounded-3" id="filtro-stato" onchange="gestisciFiltro(this.value)">
+                            <option value="all">Tutti i Todo</option>
+                            <option value="complete">Solo Completati</option>
+                            <option value="incomplete">Da Completare</option>
+                            <option value="cat1">Solo Categoria 1</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-4" id="contenitore-todos"></div>
+
+            <hr style="border: 0; border-top: 1px solid #000000; margin: 2rem 0;">
+
+            <h2 class="fw-bold text-secondary">Grafici E Statistiche</h2>
+            <div class="row">
+                <div class="col-md-4">
+                    <canvas id="chartStato"></canvas>
+                </div>
+                <div class="col-md-8" id="containerGraficoBarre">
+                    <canvas id="chartCategorie"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div id="vista-utenti" style="display: none;" class="fade-in">
+            <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-2">
+                <h2 class="fw-bold text-secondary">CRUD Utenti</h2>
+                <button class="btn btn-primary shadow-sm" onclick="vista_aggiunta_utente()">
+                    <i class="fa-solid fa-user-plus me-1"></i> Aggiungi Utente
+                </button>
+            </div>
+
+            <form id="vista_aggiunta_utente" class="card border-0 p-4 shadow mb-4 bg-white rounded-4" style="display: none;">
+                <h5 class="mb-3">Nuovo Utente</h5>
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <input type="text" class="form-control" name="name" placeholder="Nome" required>
+                    </div>
+                    <div class="col-md-4">
+                        <input class="form-control" type="text" name="surname" placeholder="Cognome" required>
+                    </div>
+                    <div class="col-md-4">
+                        <input class="form-control" type="email" name="email" placeholder="Email" required>
+                    </div>
+                    <div class="col-12 text-end">
+                        <button class="btn btn-primary" type="button" onclick="aggiungiUtente()">Inserisci Utente</button>
+                    </div>
+                </div>       
+            </form>
+
+            <div class="row g-4" id="contenitore-utenti"></div>
+        </div>
+
+    </main>
+
+    <template id="template-todo">
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 border-0 shadow-sm rounded-4 todo-card" data-id-card="">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <span class="badge bg-light text-muted border id-badge">#ID</span>
+                        <div class="form-check">
+                            <input class="delete-check" type="checkbox" style="display: none;" onclick="mostraNotifica('Riclicca <i class=\'fa-solid fa-trash\'></i> per confermare, o continua')">
+                            <input class="form-check-input isComplete" type="checkbox" disabled>
+                        </div>
+                    </div>
+                    
+                    <h5 class="card-title nome fw-bold text-dark mb-3"></h5>
+                    
+                    <div class="mb-2">
+                        <span class="badge bg-info text-dark cat-badge small">Cat: </span>
+                        <span class="badge bg-secondary list-badge small">List: </span>
+                    </div>
+
+                    <form class="modificaBox p-3 bg-light rounded-3 mb-3 border" style="display: none;">
+                        <input type="text" class="form-control form-control-sm mb-2" name="nome">
+                        <div class="form-check mb-2 small">
+                            <input class="form-check-input" type="checkbox" name="isComplete">
+                            <label>Completato</label>
+                        </div>
+                        <div class="row g-1 mb-2">
+                            <div class="col-6"><input type="number" class="form-control form-control-sm" name="categoryId" placeholder="Cat ID"></div>
+                            <div class="col-6"><input type="number" class="form-control form-control-sm" name="listId" placeholder="List ID"></div>
+                        </div>
+                        <button type="submit" class="btn btn-sm btn-success w-100">Conferma Modifica</button>
+                    </form>
+
+                    <div class="d-flex gap-2 justify-content-end mt-auto pulsantiera">
+                        <button class="btn btn-light btn-sm text-primary vedi-dettaglio" title="Info"><i class="fa-solid fa-circle-info"></i></button>
+                        <button class="btn btn-light btn-sm text-warning modifica" title="Modifica"><i class="fa-solid fa-pen"></i></button>
+                        <button class="btn btn-light btn-sm text-danger cancella" title="Elimina"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="template-user">
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 border-0 shadow-sm rounded-4 user-card">
+                <div class="card-body text-center pt-4">
+                    <div class="avatar mb-3 bg-primary text-white rounded-circle d-flex align-items-center justify-content-center mx-auto" style="width: 50px; height: 50px;">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    
+                    <div class="info-view">
+                        <h5 class="card-title fw-bold mb-1"></h5> 
+                        <p class="card-text text-muted small mb-3 email-text"></p>
+                    </div>
+
+                    <div class="edit-view" style="display: none;">
+                        <input type="text" class="form-control form-control-sm mb-1 edit-name" placeholder="Nome">
+                        <input type="text" class="form-control form-control-sm mb-1 edit-surname" placeholder="Cognome">
+                        <input type="email" class="form-control form-control-sm mb-2 edit-email" placeholder="Email">
+                        <button class="btn btn-sm btn-success w-100 mb-2 save-user-edit">Salva</button>
+                    </div>
+                    
+                    <div class="d-flex gap-2 justify-content-center">
+                        <button class="btn btn-sm btn-outline-info vedi-dettaglio-utente">Dettagli</button>
+                        <button class="btn btn-sm btn-outline-warning btn-edit-toggle">Modifica</button>
+                        <button class="btn btn-sm btn-outline-danger elimina-utente">Elimina</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <div class="modal fade" id="infoModal" tabindex="-1" aria-hidden="true"> <!--//https://getbootstrap.com/docs/4.0/components/modal/-->
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-4 border-0 shadow">
+                <div class="modal-header border-bottom-0">
+                    <h5 class="modal-title fw-bold" id="modalTitle">Dettagli</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-muted" id="modalBody" style="white-space: pre-wrap;">
+                    </div>
+                <div class="modal-footer border-top-0">
+                    <button type="button" class="btn btn-primary rounded-pill px-4" data-bs-dismiss="modal">Esci</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-container position-fixed top-0 end-0 p-3"> <!--//https://getbootstrap.com/docs/5.3/components/toasts/-->
+        <div id="liveToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body fw-medium" id="toastMessage">
+                    Operazione completata!
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="scriptv2.js"></script>
+</body>
+</html>

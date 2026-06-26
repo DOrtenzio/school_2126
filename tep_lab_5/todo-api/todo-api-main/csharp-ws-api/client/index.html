@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Todo List</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2rem; }
+    li { margin: 0.5rem 0; }
+    .complete { color: green; }
+    .incomplete { color: red; }
+  </style>
+</head>
+<body>
+
+  <div id="vista-login">
+    <h2>Login</h2>
+    <form id="form-login" onsubmit="loginForm(event)">
+      <input type="text" id="login-nome" placeholder="Nome" required>
+      <input type="email" id="login-email" placeholder="Email" required>
+      <button type="submit">Accedi</button>
+    </form>
+    <p id="login-error" style="color:red; display:none;">Credenziali non valide!</p>
+  </div>
+
+  <div id="area-privata" style="display:none;">
+    <h1>Le mie attività</h1>
+    <button onclick="logout()">Logout</button>
+    <button onclick="mostraUser()">Utenti</button>
+    <ul id="todo-list"></ul>
+    <ul id="user-list" style="display:none;"></ul>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
