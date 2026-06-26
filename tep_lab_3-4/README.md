@@ -16,6 +16,7 @@ Raccolta dei laboratori teorici svolti durante il terzo e quarto anno di TeP.
 |--:|-------------|----------|
 | 1 | Verifica1 TPSIT | [Verifica1-TPSIT](./Verifica1-TPSIT) |
 | 2 | S Frontend Js Intro Tpsit Lab | [s-frontend-js-intro-tpsitLab](./s-frontend-js-intro-tpsitLab) |
+| 2.1 | S Frontend Js Bootstrap Tpsit Lab | [s-frontend-js-bootstrap-tpsitLab](./s-frontend-js-bootstrap-tpsitLab) |
 | 3 | Thread3 24 | [thread3-24](./thread3-24) |
 | 4 | Thread4 24 | [thread4-24](./thread4-24) |
 | 5 | Thread5 24 | [thread5-24](./thread5-24) |
